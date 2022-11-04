@@ -40,3 +40,23 @@ const grid5 = [
 ];
 
 // will hold the current selected grid
+cGrid = [];
+
+// render rows and columns for displaying a grid
+function displayGrid(grid, title){
+
+    let resultsHTML = "";
+    cGrid = grid;
+    document.getElementById("gridTitle").innerHTML = title;
+    if (title.includes("void")) {
+        document.getElementById("gridTitle").setAttribute("colorValue", "void");
+    } else if (title.includes("arc")) {
+        document.getElementById("gridTitle").setAttribute("colorValue", "arc");
+    } else if (title.includes("solar")) {
+        document.getElementById("gridTitle").setAttribute("colorValue", "solar");
+    } else {
+        document.getElementById("gridTitle").setAttribute("colorValue", "default");
+    }
+
+    for ()
+}
