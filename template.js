@@ -80,7 +80,7 @@ function displayGrid(grid, title) {
           cGrid[irow][icol] = "f";
           break;
       }
-      colVal = cGrid[irow[icol]];
+      colVal = cGrid[irow][icol];
       name = `${irow}:${icol}`;
       rowVal += renderColumn(colVal, blockVal, name);
     }
@@ -94,4 +94,10 @@ function renderColumn(colVal, blockVal, name) {
     return `<td id="${name}" blockvalue="${blockVal}" class="gridStyle">
         ${colVal}
     </td>`
+}
+
+function renderRow(rowVal){
+    return `<tr h-100>
+        ${rowVal}
+    </tr>`
 }
