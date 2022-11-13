@@ -338,3 +338,73 @@ function solveMazeZH() {
     document.getElementById("results").innerHTML = `Success! It took ${stepCount} step(s)`
   }
 }
+
+function moveZH(curRow, curCol, grid, direction) {
+  var tartRow = curRow;
+  var targetCol = curCol;
+  var targetVal = "";
+  var canMove = false;
+  var minDistance = -1;
+
+  switch(direction) {
+    case directions.UP:
+      targetRow = curRow + 1;
+      break;
+    case directions.LEFT:
+      targetCol = curCol - 1;
+      break;
+    case directions.RIGHT:
+      targetCol = curCol + 1;
+      break;
+    case directions.DOWN:
+      targetRow = curRow - 1;
+      break;
+  }
+
+  // check for out of bound 
+  if (targetRow > grid.length - 1 || targetRow < 0 || targetCol > grid[targetRow].length || targetCol < 0) {
+    return {
+      canMove: false,
+      minDistance: -1,
+      direction: direction,
+      colValue: colValues.WALL
+    };
+  }
+
+  // get the value of hte square we are trying to move to
+  targetVal = grid[targetRow][targetCol];
+
+  if (targetRow == startRow && targetCol == startCol) {
+    // we cannot move back to start
+    return {
+      canMove: false,
+      minDistance: -1,
+      direction: direction,
+      colValue: colValues.WALL
+    };
+  } else if (targetVal == colValues.OPEN) {
+    // test if we can move to the target square. 'f' means no wall
+    // calculate the distance to the exit
+    return {
+      canMove: true,
+      minDistance: -1,
+      direction: direction,
+      colValue: targetVal
+    };
+  } else if (targetVal == colValues.WALL || targetVal == colValues.DEADEND) {
+    // test for a wall of deadned; 't' means wall, 'fx' means deadend
+    return {
+      canMove: false,
+      minDistance: -1,
+      direction: direction,
+      colValue: targetVal
+    };
+  } else if (targetVal == colValues.PATH) {
+    // if you have to go backwards to a previous marked square
+    // we need to mark the current square as a dead end 'fx'
+    // 'fp' means square has already been marked
+    return {
+      
+    }
+  }
+}
