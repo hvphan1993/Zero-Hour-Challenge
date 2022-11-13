@@ -1,18 +1,18 @@
 const directions = {
-  UP: "up",
-  LEFT: "left",
-  RIGHT: "right",
-  DOWN: "down",
-};
+  UP: 'up',
+  LEFT: 'left',
+  RIGHT: 'right',
+  DOWN: 'down'
+}
 
 const colValues = {
-  WALL: "t",
-  OPEN: "f",
-  PATH: "fp",
-  DEADEND: "fx",
-};
+  WALL: 't',
+  OPEN: 'f',
+  PATH: 'fp',
+  DEADEND: 'fx'
+}
 
-// set up the start and exit
+//Setup the start and exits square
 var startRow = 0;
 var startCol = 0;
 var exitRow = 3;
@@ -34,9 +34,9 @@ function solveMaze() {
   var moveRight = {};
   var moveDown = {};
 
-  // Mark the start as part of the path
+  //Mark the start as part of the path
   grid[startRow][startCol] = colValues.PATH;
-  var elementID = `${startRow}: ${startCol}`;
+  var elementID = `${startRow}:${startCol}`;
   document.getElementById(elementID).setAttribute("blockValue", "step");
 
   // solve the maze
@@ -72,7 +72,7 @@ function solveMaze() {
     }
 
     // sort nextStep by min distance
-    nextStep.sort((a, b) => (a.minDistance = b.minDistance));
+    nextStep.sort((a, b) => (a.minDistance - b.minDistance));
 
     switch (nextStep[0].direction){
         case directions.UP:
@@ -104,7 +104,7 @@ function solveMaze() {
     exitReached = markElements(curRow, curCol, prevRow, prevCol, grid);
 
   } 
-  while (exitReached == false || nopExit == true);
+  while (exitReached == false || noExit == true);
   if (exitReached == true) {
     document.getElementById(
       "results"
@@ -116,6 +116,7 @@ function solveMaze() {
 
 // see if we can move to the next square and calculate distance to the exit
 function move(curRow, curCol, grid, direction) {
+
   var targetRow = curRow;
   var targetCol = curCol;
   var targetVal = "";
@@ -123,71 +124,81 @@ function move(curRow, curCol, grid, direction) {
   var minDistance = -1;
 
   switch (direction) {
-    case directions.UP:
-      targetRow = curRow + 1;
-      break;
-    case directions.LEFT:
-      targetCol = curCol - 1;
-      break;
-    case directions.RIGHT:
-      targetCol = curCol + 1;
-      break;
-    case directions.DOWN:
-      targetRow = curRow - 1;
-      break;
+      case directions.UP:
+          targetRow = curRow + 1;
+          break;
+      case directions.LEFT:
+          targetCol = curCol - 1;
+          break;
+      case directions.RIGHT:
+          targetCol = curCol + 1;
+          break;
+      case directions.DOWN:
+          targetRow = curRow - 1;
+          break;
   }
 
-  // check for out of bounds
-  if (
-    targetRow > grid.length - 1 ||
-    targetRow < 0 ||
-    targetCol > grid[targetRow].length ||
-    targetCol < 0
-  ) {
-    return {
-      canMove: false,
-      minDistance: -1,
-      direction: direction,
-      colValue: colValues.WALL,
-    };
+  //check for out bounds
+  if (targetRow > grid.length - 1 || targetRow < 0 || targetCol > grid[targetRow].length || targetCol < 0) {
+      return {
+          canMove: false,
+          minDistance: -1,
+          direction: direction,
+          colValue: colValues.WALL
+      };
   }
 
-  // get value of the square we are trying to go to
+  //get the value of the square we are trying to move to
   targetVal = grid[targetRow][targetCol];
 
+
   if (targetRow == startRow && targetCol == startCol) {
-    // we cannot move back to start
-    return {
-      canMove: false,
-      minDistance: -1,
-      direction: direction,
-      colValue: colValues.WALL,
-    };
+      //we cannot move back to start.
+      return {
+          canMove: false,
+          minDistance: -1,
+          direction: direction,
+          colValue: colValues.WALL
+      };
+
+  } else if (targetVal == colValues.OPEN) {
+      //test if we can move to the target square.'f' means no wall
+      //calculate the distance to the exit
+      return {
+          canMove: true,
+          minDistance: GetMinDistance(targetRow, targetCol),
+          direction: direction,
+          colValue: targetVal
+      };
+
   } else if (targetVal == colValues.WALL || targetVal == colValues.DEADEND) {
-    return {
+      //test for a wall or deadend; 't' means wall, 'fx' means deadend
+      return {
+          canMove: false,
+          minDistance: -1,
+          direction: direction,
+          colValue: targetVal
+      };
+  } else if (targetVal == colValues.PATH) {
+      //if you have to go backwards to a previous marked square 
+      //we need to mark the current square as a dead end ('fx')
+      //'fp' means square has already been marked        
+      return {
+          canMove: true,
+          minDistance: GetMinDistance(targetRow, targetCol),
+          direction: direction,
+          colValue: targetVal
+      };
+  }
+
+  return {
       canMove: false,
       minDistance: -1,
       direction: direction,
-      colValue: targetVal,
-    };
-  } else if (targetVal == colValues.PATH) {
-    // if you have to go backwards to a previous marked square
-    // we need to mark the current square as a deadend ('fx')
-    // 'fp' means square has already been marked
-    return {
-      canMove: true,
-      minDistance: GetMinDistance(targetRow, targetCol),
-      direction: direction,
-      colValue: targetVal,
-    };
-  }
-  return {
-    canMove: false,
-    minDistance: -1,
-    direction: direction,
-    colValue: colValues.WALL,
+      colValue: colValues.WALL
   };
 }
+
 // gets the minDistance between target and exit
 function GetMinDistance(targetRow, targetCol) {
     return Math.abs(exitRow - targetRow) + Math.abs((exitCol - targetCol));
