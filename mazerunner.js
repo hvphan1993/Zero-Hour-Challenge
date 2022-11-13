@@ -226,3 +226,115 @@ function markElements(targetRow, targetCol, prevRow, prevCol, grid) {
         return false;
     }
 }
+
+// solve the zero hour mazes. Just find the start and run to the exit.
+function solveMazeZH() {
+  let grid = cGrid;
+  var curRow = 0;
+  var curCol = 0;
+  var prevRow = 0;
+  var prevCol = 0;
+  var stepCount = 0;
+  var exitReached = false;
+  var noExit = false;
+  var minDistance = -1;
+  var nextDirection;
+  var moveUp = {};
+  var moveLeft = {};
+  var moveRight = {};
+  var moveDown = {};
+
+  // find the start column. We know it is on row 0.
+  exitRow = grid.length -1;
+  startRow = 0;
+  startCol = grid[startRow].findIndex(isPath);
+
+  curCol = startCol;
+  curRow = startRow;
+
+  // Mark the start as part of the path
+  grid[startRow][startCol] = colValues.PATH;
+  var elementID = `${startRow}:${startCol}`;
+  document.getElementById.setAttribute("blockValue", "step");
+
+  // solve the maze by looking for the next best step
+  do {
+
+    let nextStep = [];
+    let prevRow = curRow;
+    let prevCol = curCol;
+
+    moveUp = moveZH(curRow, curCol, grid, directions.UP);
+    if (moveUp.canMove == true) {
+      nextStep.push(moveUp);
+    }
+
+    moveDown = moveZH(curRow, curCol, grid, directions.DOWN);
+    if (moveDown.canMove == true) {
+      nextStep.push(moveDown);
+    }
+
+    moveLeft = moveZH(curRow, curCol, grid, directions.LEFT);
+    if (moveLeft.canMove == true) {
+      nextStep.push(moveLeft);
+    }
+
+    moveRight = moveZH(curRow, curCol, grid, directions.RIGHT);
+    if (moveRight.canMove == true) {
+      nextStep.push(moveRight);
+    }
+
+    // if we have no where to go exit
+    if (nextStep.length == 0) {
+      noExit = true;
+      break;
+    }
+
+    // sort nextstep by target value
+    nextStep.sort(function (a, b) {
+      if (a.colValue > b.colValue) {
+        return 1;
+      }
+      if (a.colValue < b.colValue) {
+        return -1;
+      }
+      return 0;
+    });
+
+    // pick the element that is closest to the exit. Pick Up or Down first.
+    switch (nextStep[0].direction) {
+      case directions.UP:
+        // move up and add to step count
+        stepCount++;
+        curRow =curRow + 1;
+        break;
+      case directions.DOWN:
+        // Move down and add to step count
+        stepCount++;
+        curRow = curRow - 1;
+        break;
+      case directions.LEFT:
+        // Move left and add to step count
+        stepCount++;
+        curCol = curCol - 1;
+        break;
+      case directions.RIGHT:
+        // Move right and add to step count
+        stepCount++;
+        curCol = curCol + 1;
+        break;
+
+    }
+    // mark the squares on the page
+    if (curRow == exitRow) {
+      exitCol = curCol;
+    }
+
+    exitReached = markElements(curRow, curCol, prevRow, prevCol, grid);
+
+  }
+  while (exitReached == false || noExit == true);
+  if (exitReached == true) {
+    document.getElementById("results").innerHTML = `Success! It took ${stepCount} step(s)`
+  }
+}
