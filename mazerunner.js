@@ -255,7 +255,7 @@ function solveMazeZH() {
   // Mark the start as part of the path
   grid[startRow][startCol] = colValues.PATH;
   var elementID = `${startRow}:${startCol}`;
-  document.getElementById.setAttribute("blockValue", "step");
+  document.getElementById(elementID).setAttribute("blockValue", "step");
 
   // solve the maze by looking for the next best step
   do {
@@ -290,7 +290,7 @@ function solveMazeZH() {
       break;
     }
 
-    // sort nextstep by target value
+    // sort next step by target value
     nextStep.sort(function (a, b) {
       if (a.colValue > b.colValue) {
         return 1;
@@ -340,7 +340,7 @@ function solveMazeZH() {
 }
 
 function moveZH(curRow, curCol, grid, direction) {
-  var tartRow = curRow;
+  var targetRow = curRow;
   var targetCol = curCol;
   var targetVal = "";
   var canMove = false;
@@ -392,7 +392,7 @@ function moveZH(curRow, curCol, grid, direction) {
       colValue: targetVal
     };
   } else if (targetVal == colValues.WALL || targetVal == colValues.DEADEND) {
-    // test for a wall of deadned; 't' means wall, 'fx' means deadend
+    // test for a wall of deadend; 't' means wall, 'fx' means deadend
     return {
       canMove: false,
       minDistance: -1,
@@ -404,7 +404,22 @@ function moveZH(curRow, curCol, grid, direction) {
     // we need to mark the current square as a dead end 'fx'
     // 'fp' means square has already been marked
     return {
-      
-    }
+      canMove: true,
+      minDistance: -1,
+      direction: direction,
+      colValue: targetVal
+    };
   }
+
+  return {
+    canMove: false,
+    minDistance: -1,
+    direction: direction,
+    colValues: colValues.WALL
+  };
+}
+
+// test for path in array
+function isPath(element) {
+  return element == "f";
 }
