@@ -9,7 +9,6 @@ git clone https://github.com/hvphan1993/Zero-Hour-Challenge.git
 - Right click on the html and open with your preferred browser
 - Navigate the page to test different maze layouts
 - Press solve to see the shortest path appear
-- 
 
 ## Built With
 - JavaScript
