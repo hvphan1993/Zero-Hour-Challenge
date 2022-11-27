@@ -9,6 +9,7 @@ git clone https://github.com/hvphan1993/Zero-Hour-Challenge.git
 - Right click on the html and open with your preferred browser
 - Navigate the page to test different maze layouts
 - Press solve to see the shortest path appear
+- 
 
 ## Built With
 - JavaScript
@@ -16,21 +17,20 @@ git clone https://github.com/hvphan1993/Zero-Hour-Challenge.git
 - Bootstrap
 
 ## Screenshots
-![home page of Zero Hour Challenge](/assets/homepagedefault.png)
 
 Default maze set up.
+![home page of Zero Hour Challenge](/assets/homepagedefault.png)
 
-![solved maze](/assets/homepagedefaultsolved.png)
 
 Solving the maze will generate the shortest path to the end.
-
-![alternate maze option 1](/assets/maze%20choices1.png)
+![solved maze](/assets/homepagedefaultsolved.png)
+![number of steps](/assets/stepnumber.png)
 
 Select an alternate maze to test.
 
-![alternate maze option 2](/assets/maze%20choices2.png)
+![alternate maze option 1](/assets/maze%20choices1.png)
 
-More complicated maze.
+![alternate maze option 2](/assets/maze%20choices2.png)
 
 ## Destiny 2 Zero Hour Inspiration
 The Zero Hour set of mazes was designed by Coder Foundry to resemble the maze challenge found in the video game. In that challenge, the player had no way to tell which block was viable and which was not. They needed to navigate through the maze through trial and error to avoid traps and reach the other side.
